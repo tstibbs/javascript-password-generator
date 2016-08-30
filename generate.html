@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			var charTypes = {
+				'upper': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+				'lower': 'abcdefghijklmnopqrstuvwxyz',
+				'number': '0123456789',
+				'special': '!$%^&*()-=+[]{};#:@~,./<>?'
+			};
+
+			window.onload = function() { 
+				var inputs = document.querySelectorAll('div input[type=text]');
+				for (var i = 0; i < inputs.length; i++) {
+					var input = inputs[i];
+					var div = input.parentNode;
+					//set initial value
+					var type = div.id;
+					input.value = charTypes[type];
+					input.size = 40;
+					//hook up reset handler
+					var anchor = div.querySelector('a');
+					anchor.onclick = function (input, type) {
+						return function () {
+							input.value = charTypes[type];
+							return false;
+						};
+					}(input, type);
+				}
+			}
+
+			function _generatePassword(passwordLength, charBlocks) {
+				var allChars = "";
+				for (var i = 0; i < charBlocks.length; i++) {
+					allChars += charBlocks[i];
+				}
+				var numChars = allChars.length;
+				var password = "";
+				for (var i = 1; i <= passwordLength; i++) {
+					password += allChars.charAt(Math.floor(Math.random() * numChars));
+				}
+				return password;
+			}
+
+			function generatePassword(passwordLength) {
+				var charBlocks = [];
+				for (id in charTypes) {
+					var isTicked = document.querySelector('div#' + id + ' input[type=checkbox]').checked;
+					var value = document.querySelector('div#' + id + ' input[type=text]').value;
+					if (isTicked) {
+						charBlocks.push(value);
+					}
+				}
+				
+				var $length = document.getElementById('length');
+				var passwordLength = parseInt($length.value)
+				
+				var password = _generatePassword(passwordLength, charBlocks);
+				var $display = document.getElementById('display-password');
+				$display.textContent  = password;
+			}
+		</script>
+		<style type="text/css">
+			p#display-password {
+				font-family: monospace;
+			}
+			p.disclaimer{
+				font-family: sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+		<form>
+			<div id="upper">
+				<input type="checkbox" checked><input type="text">
+				<span>  <a href="#">reset</a></span>
+			</div>
+			<div id="lower">
+				<input type="checkbox" checked><input type="text">
+				<span>  <a href="#">reset</a></span>
+			</div>
+			<div id="number">
+				<input type="checkbox" checked><input type="text">
+				<span>  <a href="#">reset</a></span>
+			</div>
+			<div id="special">
+				<input type="checkbox" checked><input type="text">
+				<span>  <a href="#">reset</a></span>
+			</div>
+			<br />
+			Length: <input id="length" type="text" value="50"><br />
+			<input type="submit" value="Generate" onclick="generatePassword(); return false;">
+		</form>
+		<p id="display-password"></p>
+		<hr />
+		<p class="disclaimer">I am not responsible for anything bad that happens as a result of your use of this tool or its code. This tool is meant purely for education. Password security is an important and complex topic and you should not blindly trust some random page on the internet.</p>
+	</body>
+</html>
