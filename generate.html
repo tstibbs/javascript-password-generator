@@ -1,5 +1,10 @@
 <html>
 	<head>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="https://unpkg.com/clipboard@1.5.15/dist/clipboard.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 		<script type="text/javascript">
 			var charTypes = {
 				'upper': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -9,7 +14,7 @@
 			};
 
 			window.onload = function() { 
-				var inputs = document.querySelectorAll('div input[type=text]');
+				var inputs = document.querySelectorAll('form div input[type=text]');
 				for (var i = 0; i < inputs.length; i++) {
 					var input = inputs[i];
 					var div = input.parentNode;
@@ -69,29 +74,63 @@
 		</style>
 	</head>
 	<body>
-		<form>
-			<div id="upper">
-				<input type="checkbox" checked><input type="text">
-				<span>  <a href="#">reset</a></span>
-			</div>
-			<div id="lower">
-				<input type="checkbox" checked><input type="text">
-				<span>  <a href="#">reset</a></span>
-			</div>
-			<div id="number">
-				<input type="checkbox" checked><input type="text">
-				<span>  <a href="#">reset</a></span>
-			</div>
-			<div id="special">
-				<input type="checkbox" checked><input type="text">
-				<span>  <a href="#">reset</a></span>
-			</div>
-			<br />
-			Length: <input id="length" type="text" value="50"><br />
-			<input type="submit" value="Generate" onclick="generatePassword(); return false;">
-		</form>
-		<p id="display-password"></p>
-		<hr />
-		<p class="disclaimer">I am not responsible for anything bad that happens as a result of your use of this tool or its code. This tool is meant purely for education. Password security is an important and complex topic and you should not blindly trust some random page on the internet.</p>
+		<div class="outer" title=" ">
+			<form>
+				<div id="upper">
+					<input type="checkbox" checked><input type="text">
+					<span>  <a href="#">reset</a></span>
+				</div>
+				<div id="lower">
+					<input type="checkbox" checked><input type="text">
+					<span>  <a href="#">reset</a></span>
+				</div>
+				<div id="number">
+					<input type="checkbox" checked><input type="text">
+					<span>  <a href="#">reset</a></span>
+				</div>
+				<div id="special">
+					<input type="checkbox" checked><input type="text">
+					<span>  <a href="#">reset</a></span>
+				</div>
+				<br />
+				Length: <input id="length" type="text" value="50"><br />
+				<input type="submit" value="Generate" onclick="generatePassword(); return false;">
+			</form>
+			<p id="display-password"></p>
+			<button class="copy-button" data-clipboard-target="#display-password">
+				<i class="fa fa-clipboard" aria-hidden="true"></i>
+			</button>
+			<hr />
+			<p class="disclaimer">I am not responsible for anything bad that happens as a result of your use of this tool or its code. This tool is meant purely for education. Password security is an important and complex topic and you should not blindly trust some random page on the internet.</p>
+		</div>
+		<script type="text/javascript">
+			var buttonSelector = '.copy-button';
+			var elem = $('div.outer');
+			elem.tooltip({
+				disabled: true, //initially disabled so it doesn't show on hover
+				position: {
+					of: buttonSelector
+				}
+			});
+				
+			function showTooltip(message) {
+				elem.tooltip("option", "content", message);
+				elem.tooltip("enable");
+				elem.tooltip("open");
+				setTimeout(function() {
+					elem.tooltip("close");
+					elem.tooltip("disable");
+				}, 2000)
+			}
+			
+			var clipboard = new Clipboard(buttonSelector);
+			clipboard.on('success', function(e) {
+				showTooltip("Copied.");
+				e.clearSelection();
+			});
+			clipboard.on('error', function(e) {
+				showTooltip("Press Ctrl+C to copy");
+			});
+		</script>
 	</body>
 </html>
