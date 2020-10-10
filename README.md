@@ -1,5 +1,5 @@
 ## What is this?
-A simple javascript password generator, giving you choices about what characters you want to use to make up the password: http://tstibbs.github.io/javascript-password-generator/generate.html
+A simple javascript password generator, giving you choices about what characters you want to use to make up the password: https://sitemapxml.github.io/password-generator/
 
 ## Isn't it a bad idea to have some website generate my password?
 The password is generated in your browser; this tool does not transfer your password anywhere.
