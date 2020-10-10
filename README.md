@@ -1,3 +1,5 @@
+![Project Screenshoot](/images/screenshoot.png?raw=true)
+
 ## What is this?
 A simple javascript password generator, giving you choices about what characters you want to use to make up the password: https://sitemapxml.github.io/password-generator/
 
