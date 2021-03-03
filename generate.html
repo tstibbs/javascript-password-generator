@@ -1,10 +1,29 @@
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-		<script src="https://unpkg.com/clipboard@1.5.15/dist/clipboard.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+		<style type="text/css">
+			#toast-container > div {
+				opacity: 1 !important;
+			}
+			.toast-message {
+				font-family: sans-serif;
+			}
+
+			span#display-password {
+				font-family: monospace;
+			}
+			p.disclaimer{
+				font-family: sans-serif;
+			}
+			input[type=text] {
+				max-width: 70vw
+			}
+		</style>
 		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-		<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 		<script type="text/javascript">
 			var charTypes = {
 				'upper': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -61,17 +80,10 @@
 				
 				var password = _generatePassword(passwordLength, charBlocks);
 				var $display = document.getElementById('display-password');
-				$display.textContent  = password;
+				$display.textContent = password;
+				selectAndCopy()
 			}
 		</script>
-		<style type="text/css">
-			p#display-password {
-				font-family: monospace;
-			}
-			p.disclaimer{
-				font-family: sans-serif;
-			}
-		</style>
 	</head>
 	<body>
 		<div class="outer" title=" ">
@@ -96,41 +108,39 @@
 				Length: <input id="length" type="text" value="50"><br />
 				<input type="submit" value="Generate" onclick="generatePassword(); return false;">
 			</form>
-			<p id="display-password"></p>
-			<button class="copy-button" data-clipboard-target="#display-password">
+			<p>
+				<span id="display-password"></span>
+			</p>
+			<button class="copy-button">
 				<i class="fa fa-clipboard" aria-hidden="true"></i>
 			</button>
 			<hr />
 			<p class="disclaimer">I am not responsible for anything bad that happens as a result of your use of this tool or its code. This tool is meant purely for education. Password security is an important and complex topic and you should not blindly trust some random page on the internet.</p>
 		</div>
 		<script type="text/javascript">
+			toastr.options = {
+				"positionClass": "toast-top-center"
+			}
+
 			var buttonSelector = '.copy-button';
-			var elem = $('div.outer');
-			elem.tooltip({
-				disabled: true, //initially disabled so it doesn't show on hover
-				position: {
-					of: buttonSelector
-				}
-			});
 				
-			function showTooltip(message) {
-				elem.tooltip("option", "content", message);
-				elem.tooltip("enable");
-				elem.tooltip("open");
-				setTimeout(function() {
-					elem.tooltip("close");
-					elem.tooltip("disable");
-				}, 2000)
+			function showMessage(message) {
+				toastr.success(message)
 			}
 			
-			var clipboard = new Clipboard(buttonSelector);
-			clipboard.on('success', function(e) {
-				showTooltip("Copied.");
-				e.clearSelection();
-			});
-			clipboard.on('error', function(e) {
-				showTooltip("Press Ctrl+C to copy");
-			});
+			$(buttonSelector).click(selectAndCopy)
+
+			function selectAndCopy() {
+				var span = document.getElementById('display-password')
+				var range = document.createRange();
+				range.setStartBefore(span.firstChild);
+				range.setEndAfter(span.lastChild);
+				var sel = window.getSelection();
+				sel.removeAllRanges();
+				sel.addRange(range);
+				document.execCommand("copy");
+				showMessage("Copied.");
+			}
 		</script>
 	</body>
 </html>
