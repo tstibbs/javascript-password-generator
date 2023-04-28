@@ -1,3 +1,6 @@
+[![License: MIT](https://img.shields.io/github/license/tstibbs/javascript-password-generator)](LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/tstibbs/javascript-password-generator.svg)](https://github.com/tstibbs/javascript-password-generator/issues)
+
 ## What is this?
 A simple javascript password generator, giving you choices about what characters you want to use to make up the password: http://tstibbs.github.io/javascript-password-generator/generate.html
 
